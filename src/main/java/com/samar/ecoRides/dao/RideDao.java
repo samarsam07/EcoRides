@@ -1,10 +1,9 @@
 package com.samar.ecoRides.dao;
 
-import com.samar.ecoRides.model.User;
+import com.samar.ecoRides.model.Ride;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDao extends JpaRepository<User, Long> {
-    User findByUserName(String username);
+public interface RideDao extends JpaRepository<Ride,Long> {
 }

@@ -1,5 +1,6 @@
 package com.samar.ecoRides.controller;
 
+import com.samar.ecoRides.dto.UserDto;
 import com.samar.ecoRides.model.User;
 import com.samar.ecoRides.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ public class UserController {
     @Autowired
      private UserService userService;
 
-    @GetMapping("/username")
-    public ResponseEntity<User> getUser(){
+    @GetMapping
+    public ResponseEntity<UserDto> getUser(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String name=authentication.getName();
-        User user=userService.getUser(name);
-        if(user==null)return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(user,HttpStatus.FOUND);
+        UserDto userDto=userService.getUser(name);
+        if(userDto==null)return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userDto,HttpStatus.FOUND);
     }
 
     @PutMapping
@@ -34,6 +35,16 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+    @DeleteMapping
+    private ResponseEntity<User> deleteUser(){
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String name=authentication.getName();
+        User user=userService.deleteUser(name);
+        if(user==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
 }

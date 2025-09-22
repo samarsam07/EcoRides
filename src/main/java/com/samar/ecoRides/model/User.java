@@ -1,43 +1,40 @@
 package com.samar.ecoRides.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+
 @Entity
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"email", "userName"})
+        }
+)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    @Column(nullable = false)
     private  String userName;
+    @Column(nullable = false)
     private String email;
     private String password;
     private String walletAddress;
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Ride> organizedRides = new ArrayList<>();
+    @ManyToMany(mappedBy = "passengers")
+    private List<Ride> joinedRides = new ArrayList<>();
+
+
     public User() {
-    }
-
-    public User(Long userId, String userName, String email, String password, String walletAddress, LocalDateTime createdAt) {
-        this.userId = userId;
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-        this.walletAddress = walletAddress;
-        this.createdAt = createdAt;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public Long getUserId() {
@@ -46,6 +43,14 @@ public class User {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -78,5 +83,21 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<Ride> getOrganizedRides() {
+        return organizedRides;
+    }
+
+    public void setOrganizedRides(List<Ride> organizedRides) {
+        this.organizedRides = organizedRides;
+    }
+
+    public List<Ride> getJoinedRides() {
+        return joinedRides;
+    }
+
+    public void setJoinedRides(List<Ride> joinedRides) {
+        this.joinedRides = joinedRides;
     }
 }
