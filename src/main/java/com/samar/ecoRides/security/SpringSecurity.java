@@ -25,7 +25,7 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(request -> request
-                        .requestMatchers( "/user/**","/rides/**").authenticated()
+                        .requestMatchers( "/user/**","/rides/**","/join/**").authenticated()
                         .requestMatchers("/public/**")
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())

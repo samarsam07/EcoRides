@@ -2,6 +2,7 @@ package com.samar.ecoRides.service;
 
 import com.samar.ecoRides.dao.UserDao;
 import com.samar.ecoRides.dto.UserDto;
+import com.samar.ecoRides.mapper.DtoMapper;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +17,17 @@ import java.util.List;
 public class UserService {
 
     private static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+    private static final DtoMapper dtoMapper=new DtoMapper();
     @Autowired
     private UserDao userDao;
+
+
     public UserDto getUser(String name) {
         User user=userDao.findByUserName(name);
-
         if(user!=null){
-            UserDto userDto=new UserDto();
-            userDto.setUserId(user.getUserId());
-            userDto.setEmail(user.getEmail());
-            userDto.setUserName(user.getUserName());
-            userDto.setJoinedRides(user.getJoinedRides());
-            userDto.setOrganizedRides(user.getOrganizedRides());
-            return userDto;
-        }else{
-            return null;
+            return dtoMapper.toUserDto(user);
         }
-
+            return null;
     }
 
     public void createUser(User user) {

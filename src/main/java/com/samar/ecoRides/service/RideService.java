@@ -3,6 +3,7 @@ package com.samar.ecoRides.service;
 import com.samar.ecoRides.dao.RideDao;
 import com.samar.ecoRides.dao.UserDao;
 import com.samar.ecoRides.dto.RideDto;
+import com.samar.ecoRides.mapper.DtoMapper;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +21,11 @@ public class RideService {
     @Autowired
     private UserService userService;
 
+    private final DtoMapper dtoMapper=new DtoMapper();
 
     public RideDto getRideById(Long myId) {
         Ride ride= rideDao.findById(myId).get();
-        RideDto rideDto=new RideDto();
-        if(ride!=null){
-            rideDto.setCapacity(ride.getCapacity());
-            rideDto.setDestination(ride.getDestination());
-            rideDto.setCurrentUsers(ride.getCurrentUsers());
-            rideDto.setOrganizerName(ride.getOrganizer().getUserName());
-            rideDto.setSource(ride.getSource());
-            rideDto.setStatus(ride.getStatus());
-            rideDto.setRideId(ride.getRideId());
-            rideDto.setTime(ride.getTime());
-            rideDto.setTotalCost(ride.getTotalCost());
-        }
-        return rideDto;
+        return dtoMapper.toRideDto(ride);
     }
 
     public List<RideDto> getAllOrganizedRidesOfUser(String userName) {
@@ -43,17 +33,7 @@ public class RideService {
         List<Ride>rides=user.getOrganizedRides();
         List<RideDto> rideDtos=new ArrayList<>();
         for(Ride ride:rides){
-            RideDto rideDto=new RideDto();
-            rideDto.setCapacity(ride.getCapacity());
-            rideDto.setDestination(ride.getDestination());
-            rideDto.setCurrentUsers(ride.getCurrentUsers());
-            rideDto.setOrganizerName(ride.getOrganizer().getUserName());
-            rideDto.setSource(ride.getSource());
-            rideDto.setStatus(ride.getStatus());
-            rideDto.setRideId(ride.getRideId());
-            rideDto.setTime(ride.getTime());
-            rideDto.setTotalCost(ride.getTotalCost());
-            rideDtos.add(rideDto);
+            rideDtos.add(dtoMapper.toRideDto(ride));
         }
         return rideDtos;
     }
@@ -65,5 +45,13 @@ public class RideService {
         ride.setOrganizer(user);
         rideDao.save(ride);
         user.getOrganizedRides().add(ride);
+    }
+
+    public void saveRide(Ride ride){
+        rideDao.save(ride);
+    }
+
+    public Ride findById(Long rideId){
+        return rideDao.findById(rideId).get();
     }
 }
