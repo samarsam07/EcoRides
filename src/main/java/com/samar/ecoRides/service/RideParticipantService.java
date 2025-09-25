@@ -61,4 +61,17 @@ public class RideParticipantService {
         }
         return dtoMapper.toRideParticipantDto(rideParticipant);
     }
+
+    public void leaveRide(Long id, String username) {
+        User user=userService.findByUserName(username);
+        Ride ride=rideService.findById(id);
+        RideParticipant rideParticipant=rideParticipantDao.findByRideAndUser(ride,user)
+                .orElseThrow(()->new EntityNotFoundException("NOT FOUND"));
+        rideParticipantDao.delete(rideParticipant);
+        ride.setCurrentUsers(ride.getCurrentUsers()-1);
+        if(ride.getCurrentUsers()<ride.getCapacity()){
+            ride.setStatus("REQUESTED");
+        }
+        rideService.saveRide(ride);
+    }
 }

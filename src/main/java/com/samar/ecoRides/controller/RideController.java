@@ -18,12 +18,20 @@ public class RideController {
     @Autowired
     private RideService rideService;
 
-    @GetMapping("/id/{myId}")
-    public ResponseEntity<RideDto> getRideById(@PathVariable Long myId){
-        RideDto rideDto=rideService.getRideById(myId);
+    @GetMapping("/id/{rideId}")
+    public ResponseEntity<RideDto> getRideById(@PathVariable Long rideId){
+        RideDto rideDto=rideService.getRideById(rideId);
         if(rideDto==null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return  new ResponseEntity<>(rideDto,HttpStatus.OK);
+    }
+    @PutMapping("id/{rideId}")
+    public ResponseEntity<RideDto> updateRideById(@PathVariable Long rideId,@RequestBody Ride ride){
+        RideDto rideDto=rideService.updateRideById(rideId,ride);
+        if(rideDto==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(rideDto,HttpStatus.ACCEPTED);
     }
     @GetMapping("/all")
     public ResponseEntity<List<RideDto>> getAllOrganizedRidesOfUser(){

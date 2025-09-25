@@ -54,4 +54,22 @@ public class RideService {
     public Ride findById(Long rideId){
         return rideDao.findById(rideId).get();
     }
+
+    public RideDto updateRideById(Long rideId,Ride ride) {
+        Ride old=rideDao.findById(rideId).get();
+        if(old!=null){
+            old.setSource(ride.getSource());
+            old.setDestination(ride.getDestination());
+            old.setTime(LocalDateTime.now());
+            old.setCapacity(ride.getCapacity());
+            old.setTotalCost(ride.getTotalCost());
+            int size=old.getPassengers().size();
+            old.setCurrentUsers(ride.getCurrentUsers()+size);
+            if(old.getCurrentUsers()==old.getCapacity())
+                old.setStatus("CONFIRM");
+            rideDao.save(old);
+            return dtoMapper.toRideDto(old);
+        }
+        return null;
+    }
 }

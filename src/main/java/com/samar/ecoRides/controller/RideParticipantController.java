@@ -32,4 +32,11 @@ public class RideParticipantController {
         RideParticipantDto rideParticipantDto=rideParticipantService.joinRide(id,userName);
         return new ResponseEntity<>(rideParticipantDto,HttpStatus.CREATED);
     }
+    @PostMapping("delete/rideId/{id}")
+    public ResponseEntity<?> leaveRide(@PathVariable Long id){
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String username=authentication.getName();
+        rideParticipantService.leaveRide(id,username);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 }

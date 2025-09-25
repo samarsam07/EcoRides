@@ -42,5 +42,4 @@ public class Ride {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> passengers = new ArrayList<>();
-
 }
