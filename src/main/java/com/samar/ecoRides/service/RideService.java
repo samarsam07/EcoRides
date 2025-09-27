@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+
 public class RideService {
     @Autowired
     private RideDao rideDao;
@@ -71,5 +72,20 @@ public class RideService {
             return dtoMapper.toRideDto(old);
         }
         return null;
+    }
+
+    public void deleteRideById(String username, Long rideId) {
+        try {
+            User user=userService.findByUserName(username);
+            Optional<Ride> deleted=rideDao.findById(rideId);
+            boolean removed=user.getOrganizedRides().removeIf(x->x.getRideId().equals(rideId));
+            if(removed){
+                userService.saveUser(user);
+                rideDao.deleteById(rideId);
+            }
+        } catch (Exception e) {
+//            log.error("kuch fat gaya h {}",e.getMessage());
+            System.out.println(e.getMessage());
+        }
     }
 }

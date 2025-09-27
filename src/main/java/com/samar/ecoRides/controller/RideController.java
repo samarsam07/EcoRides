@@ -55,4 +55,17 @@ public class RideController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    @DeleteMapping("/id/{rideId}")
+    public ResponseEntity<HttpStatus> deleteRideById(@PathVariable Long rideId){
+        try{
+            Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+            String username=authentication.getName();
+            rideService.deleteRideById(username,rideId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
