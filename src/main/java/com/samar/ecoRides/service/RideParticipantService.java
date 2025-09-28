@@ -8,6 +8,7 @@ import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.RideParticipant;
 import com.samar.ecoRides.model.User;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ public class RideParticipantService {
         return rideParticipantDtos;
     }
 
+    @Transactional
     public RideParticipantDto joinRide(Long rideId,String username){
         Ride ride = rideService.findById(rideId);
         User user = userService.findByUserName(username);
@@ -62,6 +64,7 @@ public class RideParticipantService {
         return dtoMapper.toRideParticipantDto(rideParticipant);
     }
 
+    @Transactional
     public void leaveRide(Long id, String username) {
         User user=userService.findByUserName(username);
         Ride ride=rideService.findById(id);

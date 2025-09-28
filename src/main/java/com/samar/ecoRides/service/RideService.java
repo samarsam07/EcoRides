@@ -6,6 +6,7 @@ import com.samar.ecoRides.dto.RideDto;
 import com.samar.ecoRides.mapper.DtoMapper;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +75,7 @@ public class RideService {
         return null;
     }
 
+    @Transactional
     public void deleteRideById(String username, Long rideId) {
         try {
             User user=userService.findByUserName(username);
