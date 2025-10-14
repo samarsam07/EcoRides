@@ -1,7 +1,6 @@
 package com.samar.ecoRides.controller;
 
 import com.samar.ecoRides.dto.RideParticipantDto;
-import com.samar.ecoRides.model.RideParticipant;
 import com.samar.ecoRides.service.RideParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

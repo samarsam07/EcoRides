@@ -1,8 +1,6 @@
 package com.samar.ecoRides.mapper;
 
-import com.samar.ecoRides.dto.RideDto;
-import com.samar.ecoRides.dto.RideParticipantDto;
-import com.samar.ecoRides.dto.UserDto;
+import com.samar.ecoRides.dto.*;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.RideParticipant;
 import com.samar.ecoRides.model.User;
@@ -17,6 +15,7 @@ public class DtoMapper {
         dto.setUserId(user.getUserId());
         dto.setUserName(user.getUserName());
         dto.setEmail(user.getEmail());
+        dto.setPhoneNumber(user.getPhoneNumber());
         return dto;
     }
 
@@ -25,6 +24,7 @@ public class DtoMapper {
         RideDto dto = new RideDto();
         dto.setRideId(ride.getRideId());
         dto.setSource(ride.getSource());
+        dto.setCostPerPassenger(ride.getCostPerPassenger());
         dto.setDestination(ride.getDestination());
         dto.setTime(ride.getTime());
         dto.setCapacity(ride.getCapacity());
@@ -55,6 +55,37 @@ public class DtoMapper {
         dto.setJoinedAt(rp.getJoinedAt());
         dto.setUser(toUserDto(rp.getUser()));
         dto.setRide(toRideDto(rp.getRide()));
+        return dto;
+    }
+
+    public PaymentDto toPaymentDto(RideParticipant participant) {
+        if (participant == null) return null;
+
+        PaymentDto dto = new PaymentDto();
+        dto.setParticipantId(participant.getId());
+        dto.setUserName(participant.getUser().getUserName());
+        dto.setEmail(participant.getUser().getEmail());
+        dto.setShareAmount(participant.getShareAmount());
+        dto.setPaymentId(participant.getPaymentId());
+        dto.setPaymentStatus(participant.getPaymentStatus());
+        dto.setJoinedAt(participant.getJoinedAt());
+
+        return dto;
+    }
+
+    public  PayoutDto toPayoutDto(Ride ride) {
+        if (ride == null) return null;
+
+        PayoutDto dto = new PayoutDto();
+        dto.setRideId(ride.getRideId());
+        dto.setSource(ride.getSource());
+        dto.setDestination(ride.getDestination());
+        dto.setTotalCost(ride.getTotalCost());
+        dto.setTotalCollected(ride.getTotalCollected());
+        dto.setEscrowStatus(ride.getEscrowStatus());
+        dto.setOrganizerName(ride.getOrganizer().getUserName());
+        dto.setOrganizerUpiId(ride.getOrganizerUpiId());
+
         return dto;
     }
 }

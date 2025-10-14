@@ -34,4 +34,15 @@ public class RideParticipant {
 
     @Column(nullable = false)
     private String status;
+
+    @Column
+    private String paymentId;
+
+    @Column
+    private String paymentStatus = "PENDING";
+
+    private String orderId;
+
+    @Column
+    private Integer shareAmount;
 }

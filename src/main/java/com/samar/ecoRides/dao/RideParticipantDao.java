@@ -13,4 +13,6 @@ public interface RideParticipantDao extends JpaRepository<RideParticipant,Long> 
     Optional<RideParticipant> findByRideAndUser(Ride ride, User user);
     List<RideParticipant> findByRide(Ride ride);
     List<RideParticipant> findByUser(User user);
+    RideParticipant findByPaymentId(String paymentId);
+    RideParticipant findByOrderId(String orderId);
 }

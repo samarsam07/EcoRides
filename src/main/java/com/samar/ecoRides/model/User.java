@@ -12,7 +12,7 @@ import java.util.List;
 @Table(
         name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"email", "userName"})
+                @UniqueConstraint(columnNames = {"email", "userName","phoneNumber"})
         }
 )
 public class User {
@@ -26,6 +26,9 @@ public class User {
     private String password;
     private String walletAddress;
     private LocalDateTime createdAt;
+    private String phoneNumber;
+    @Column(nullable = true, unique = true)
+    private String upiId;
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -33,12 +36,27 @@ public class User {
     @ManyToMany(mappedBy = "passengers")
     private List<Ride> joinedRides = new ArrayList<>();
 
+    public String getUpiId() {
+        return upiId;
+    }
+
+    public void setUpiId(String upiId) {
+        this.upiId = upiId;
+    }
 
     public User() {
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void setUserId(Long userId) {

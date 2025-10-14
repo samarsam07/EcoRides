@@ -1,26 +1,19 @@
 package com.samar.ecoRides.dto;
 
-import com.samar.ecoRides.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RideDto {
+public class PayoutDto {
     private Long rideId;
     private String source;
     private String destination;
-    private LocalDateTime time;
-    private Integer capacity;
-    private Integer currentUsers;
     private Integer totalCost;
-    private Integer costPerPassenger;
-    private String status;
+    private Integer totalCollected;
+    private String escrowStatus;
     private String organizerName;
-    private List<UserDto> passengers;
+    private String organizerUpiId;
 }

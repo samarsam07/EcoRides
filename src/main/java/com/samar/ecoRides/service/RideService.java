@@ -42,6 +42,7 @@ public class RideService {
 
     public void createRide(String userName, Ride ride) {
         User user=userService.findByUserName(userName);
+        ride.setCostPerPassenger(ride.getTotalCost()/ride.getCapacity());
         ride.setTime(LocalDateTime.now());
         ride.setStatus("REQUESTED");
         ride.setOrganizer(user);
