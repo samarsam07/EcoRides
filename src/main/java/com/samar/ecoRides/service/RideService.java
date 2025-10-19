@@ -40,6 +40,7 @@ public class RideService {
         return rideDtos;
     }
 
+    @Transactional
     public void createRide(String userName, Ride ride) {
         User user=userService.findByUserName(userName);
         ride.setCostPerPassenger(ride.getTotalCost()/ride.getCapacity());
@@ -90,5 +91,30 @@ public class RideService {
 //            log.error("kuch fat gaya h {}",e.getMessage());
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<RideDto> getAllAvailableRides() {
+        List<Ride> rides = rideDao.findByStatus("REQUESTED");
+        List<RideDto> rideDtos = new ArrayList<>();
+        for (Ride ride : rides) {
+            rideDtos.add(dtoMapper.toRideDto(ride));
+        }
+        return rideDtos;
+    }
+    public List<RideDto> convertRidesToDtos(List<Ride> rides) {
+        List<RideDto> rideDtos = new ArrayList<>();
+        for (Ride ride : rides) {
+            rideDtos.add(dtoMapper.toRideDto(ride));
+        }
+        return rideDtos;
+    }
+
+    public List<RideDto> filterRideBySourceAndDestination(String source, String destination) {
+        List<Ride> rides=rideDao.findBySourceAndDestinationAndStatus(source, destination,"REQUESTED");
+        List<RideDto> rideDtos=new ArrayList<>();
+        for(Ride ride:rides){
+            rideDtos.add(dtoMapper.toRideDto(ride));
+        }
+        return rideDtos;
     }
 }

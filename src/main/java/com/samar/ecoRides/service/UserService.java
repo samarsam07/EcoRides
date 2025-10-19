@@ -5,12 +5,15 @@ import com.samar.ecoRides.dto.UserDto;
 import com.samar.ecoRides.mapper.DtoMapper;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,5 +68,13 @@ public class UserService {
 
     public void saveUser(User user){
         userDao.save(user);
+    }
+
+    @Transactional(readOnly = true) // readOnly is a performance optimization for GET operations
+    public List<Ride> findOrganizedRidesByUsername(String username) {
+        User user = userDao.findByUserName(username);
+        // This forces the lazy collection to be loaded within the active transaction
+        List<Ride> rides = new ArrayList<>(user.getOrganizedRides());
+        return rides;
     }
 }

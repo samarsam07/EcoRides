@@ -44,6 +44,10 @@ public class RideParticipantService {
         if(ride==null || user==null){
             return null;
         }
+        User organizer=ride.getOrganizer();
+        if(Objects.equals(user,organizer)){
+            throw  new IllegalStateException("orgainzer can not join it own ride");
+        }
         if (rideParticipantDao.existsByRideAndUser(ride, user)) {
             throw new IllegalStateException("User already joined this ride");
         }

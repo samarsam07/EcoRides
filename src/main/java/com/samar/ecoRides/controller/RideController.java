@@ -3,6 +3,7 @@ package com.samar.ecoRides.controller;
 import com.samar.ecoRides.dto.RideDto;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.service.RideService;
+import com.samar.ecoRides.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ import java.util.List;
 public class RideController {
     @Autowired
     private RideService rideService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/id/{rideId}")
     public ResponseEntity<RideDto> getRideById(@PathVariable Long rideId){
@@ -34,14 +38,18 @@ public class RideController {
         return new ResponseEntity<>(rideDto,HttpStatus.ACCEPTED);
     }
     @GetMapping("/all")
-    public ResponseEntity<List<RideDto>> getAllOrganizedRidesOfUser(){
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        String userName=authentication.getName();
-        List<RideDto> rides=rideService.getAllOrganizedRidesOfUser(userName);
-        if(rides.isEmpty()){
+    public ResponseEntity<List<RideDto>> getAllOrganizedRidesOfUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        List<Ride> rides = userService.findOrganizedRidesByUsername(userName);
+
+        if (rides.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(rides,HttpStatus.FOUND);
+
+        List<RideDto> rideDtos = rideService.convertRidesToDtos(rides); // We'll add this helper method next
+        return new ResponseEntity<>(rideDtos, HttpStatus.OK);
     }
 
     @PostMapping
@@ -55,6 +63,14 @@ public class RideController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/available")
+    public ResponseEntity<List<RideDto>> getAllAvailableRides() {
+        List<RideDto> rides = rideService.getAllAvailableRides();
+        if (rides.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(rides, HttpStatus.OK);
+    }
     @DeleteMapping("/id/{rideId}")
     public ResponseEntity<HttpStatus> deleteRideById(@PathVariable Long rideId){
         try{
@@ -66,6 +82,17 @@ public class RideController {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/available/filter/{source}/{destination}")
+    public ResponseEntity<List<RideDto>> filterRideBySourceAndDestination(
+            @PathVariable String source,@PathVariable String destination
+    ){
+        List<RideDto> rides=rideService.filterRideBySourceAndDestination(source,destination);
+        if(rides.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(rides,HttpStatus.OK);
     }
 
 }

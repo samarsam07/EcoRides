@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RideDao extends JpaRepository<Ride,Long> {
     List<Ride> findByStatus(String status);
+    List<Ride> findBySourceAndDestinationAndStatus(String source,String destination,String status);
 }
