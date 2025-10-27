@@ -39,6 +39,7 @@ public class SpringSecurity {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/rides/**", "/join/**", "/user/**", "/payments/**").authenticated()
                         .anyRequest().authenticated()
                 )
