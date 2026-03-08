@@ -5,12 +5,14 @@ import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.service.RideService;
 import com.samar.ecoRides.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -84,15 +86,30 @@ public class RideController {
         }
     }
 
-    @GetMapping("/available/filter/{source}/{destination}")
-    public ResponseEntity<List<RideDto>> filterRideBySourceAndDestination(
-            @PathVariable String source,@PathVariable String destination
-    ){
-        List<RideDto> rides=rideService.filterRideBySourceAndDestination(source,destination);
-        if(rides.isEmpty()){
+//    @GetMapping("/available/filter/{source}/{destination}")
+//    public ResponseEntity<List<RideDto>> filterRideBySourceAndDestination(
+//            @PathVariable String source,@PathVariable String destination
+//    ){
+//        List<RideDto> rides=rideService.filterRideBySourceAndDestination(source,destination);
+//        if(rides.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(rides,HttpStatus.OK);
+//    }
+
+    @GetMapping("/available/search")
+    public ResponseEntity<List<RideDto>> searchAvailableRides(
+            @RequestParam(required = false) String source,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime endDate,
+            @RequestParam(required = false) Integer maxPrice
+            ){
+        List<RideDto> rides=rideService
+                .getAllAvailableRidesWithAdvanceFilter(source,destination,startDate,endDate,maxPrice);
+        if(rides.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+
         return new ResponseEntity<>(rides,HttpStatus.OK);
     }
-
 }

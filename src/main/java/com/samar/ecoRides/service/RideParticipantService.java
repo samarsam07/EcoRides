@@ -25,7 +25,8 @@ public class RideParticipantService {
     private RideService rideService;
     @Autowired
     private RideParticipantDao rideParticipantDao;
-    private final DtoMapper dtoMapper=new DtoMapper();
+    @Autowired
+    private  DtoMapper dtoMapper;
 
     public List<RideParticipantDto> getRideParticipantByUser(String username) {
         User user=userService.findByUserName(username);

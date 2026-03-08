@@ -4,16 +4,20 @@ import com.samar.ecoRides.dao.RideDao;
 import com.samar.ecoRides.model.Ride;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Component
 public class RideStatusScheduler {
 
     @Autowired
     RideDao rideDao;
 
     @Scheduled(fixedRate = 60000)
+    @Transactional
     public  void checkRideStatus() {
         System.out.println("Running");
         List<Ride> requestedRides = rideDao.findByStatus("REQUESTED");

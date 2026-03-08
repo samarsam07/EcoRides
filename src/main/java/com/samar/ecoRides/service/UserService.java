@@ -20,7 +20,8 @@ import java.util.List;
 public class UserService {
 
     private static final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-    private static final DtoMapper dtoMapper=new DtoMapper();
+    @Autowired
+    private  DtoMapper dtoMapper;
     @Autowired
     private UserDao userDao;
 

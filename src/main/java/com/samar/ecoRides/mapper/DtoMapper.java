@@ -4,10 +4,12 @@ import com.samar.ecoRides.dto.*;
 import com.samar.ecoRides.model.Ride;
 import com.samar.ecoRides.model.RideParticipant;
 import com.samar.ecoRides.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+@Component
 public class DtoMapper {
     public UserDto toUserDto(User user) {
         if (user == null) return null;

@@ -17,7 +17,7 @@ public class RideParticipantController {
 
     @Autowired
     private RideParticipantService rideParticipantService;
-    @GetMapping("/details")
+    @GetMapping
     public ResponseEntity<List<RideParticipantDto>> getRideParticipantByUser(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();

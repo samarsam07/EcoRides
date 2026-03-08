@@ -23,7 +23,8 @@ public class RideService {
     @Autowired
     private UserService userService;
 
-    private final DtoMapper dtoMapper=new DtoMapper();
+    @Autowired
+    private  DtoMapper dtoMapper;
 
     public RideDto getRideById(Long myId) {
         Ride ride= rideDao.findById(myId).get();
@@ -116,5 +117,20 @@ public class RideService {
             rideDtos.add(dtoMapper.toRideDto(ride));
         }
         return rideDtos;
+    }
+
+    public List<RideDto> getAllAvailableRidesWithAdvanceFilter(
+            String source, String destination, LocalDateTime startDate
+            , LocalDateTime endDate, Integer maxPrice) {
+
+        String status="REQUESTED";
+
+        LocalDateTime adjustedEndDate = (endDate != null) ? endDate.withHour(23).withMinute(59).withSecond(59) : null;
+        LocalDateTime adjustedStartDate = (startDate != null) ? startDate.withHour(0).withMinute(0).withSecond(0) : null;
+        List<Ride> rides=rideDao.findAvailableRidesWithFilters(
+                source, destination, status,
+                adjustedStartDate, adjustedEndDate, maxPrice);
+
+        return convertRidesToDtos(rides);
     }
 }

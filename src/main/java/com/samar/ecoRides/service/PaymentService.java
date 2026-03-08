@@ -36,8 +36,8 @@ public class PaymentService {
 
     @Autowired
     private RideParticipantDao participantDao;
-
-    private final DtoMapper DTOMAPPER = new DtoMapper();
+    @Autowired
+    private  DtoMapper DTOMAPPER;
 
     public PaymentDto createPaymentOrder(Long rideId, String username) throws RazorpayException {
         Ride ride = rideDao.findById(rideId)
